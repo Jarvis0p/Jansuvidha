@@ -1,0 +1,93 @@
+<%- include('partials/header') %>
+
+
+<div class="container-login">
+  <div id="sender">
+      <input class="numberInput" type="text" id="number" placeholder="+923...">
+      <div id="recaptcha-container"></div>
+      <input type="button" id="send" value="Send" onClick="phoneAuth()">
+    </div>
+    <div id="verifier" style="display: none">
+      <input type="text" id="verificationcode" placeholder="OTP Code">
+      <input type="button" id="verify" value="Verify" onClick="codeverify()">
+      <div class="p-conf">Number Verified</div>
+      <div class="n-conf">OTP ERROR</div>
+    </div>
+  <!-- <div class="login-page">
+    <div id="sender">
+      <input class="numberInput" type="text" id="number" placeholder="Enter your phone number." />
+      <div id="recaptcha-container"></div>
+      <input type="button" id="send" value="Send OTP" onClick="phoneAuth()">
+    </div>
+    <div id="verifier" style="display: none">
+      <input type="number" id="verificationcode" placeholder="OTP Code">
+      <input type="button" id="verify" value="Verify" onClick="codeverify()">
+      <div class="p-conf">Number Verified</div>
+      <div class="n-conf">OTP ERROR</div>
+    </div>
+  </div> -->
+
+</div>
+<!--	add firebase SDK-->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<script>
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqJ8cWlbM0Y-hkIgxxKIERkLEfnRgxMqM",
+    authDomain: "janshudvidha.firebaseapp.com",
+    projectId: "janshudvidha",
+    storageBucket: "janshudvidha.appspot.com",
+    messagingSenderId: "87066654554",
+    appId: "1:87066654554:web:561adb95fc681790ab6563",
+    measurementId: "G-JQHJCLRPVG"
+  };
+  firebase.initializeApp(firebaseConfig);
+  render();
+
+  function render() {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    recaptchaVerifier.render();
+  }
+  // function for send message
+  function phoneAuth() {
+    var number = document.getElementById('number').value;
+    firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+      window.confirmationResult = confirmationResult;
+      coderesult = confirmationResult;
+      document.getElementById('sender').style.display = 'none';
+      document.getElementById('verifier').style.display = 'block';
+    }).catch(function (error) {
+      alert(error.message);
+    });
+  }
+  // function for code verify
+  function codeverify() {
+    var code = document.getElementById('verificationcode').value;
+    coderesult.confirm(code).then((result) => {
+      console.log(result.user.uid);
+      document.getElementsByClassName('p-conf')[0].style.display = 'block';
+      document.getElementsByClassName('n-conf')[0].style.display = 'none';
+      return fetch("/login", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(result)
+        })
+        .then(() => {
+          return firebase.auth().signOut();
+        })
+        .then(() => {
+          window.location.assign("/user");
+        });
+    }).catch(function () {
+      document.getElementsByClassName('p-conf')[0].style.display = 'none';
+      document.getElementsByClassName('n-conf')[0].style.display = 'block';
+    })
+  }
+</script>
+
+<%- include('partials/footer') %>
