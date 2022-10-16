@@ -27,9 +27,14 @@
   <link href="/css/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="/css/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <!-- Variables CSS Files -->
+  <!-- Variables CSS Files. Uncomment your preferred color scheme -->
   <link href="/variables.css" rel="stylesheet">
+  <!-- <link href="assets/css/variables-blue.css" rel="stylesheet"> -->
   <link href="/variables-green.css" rel="stylesheet">
+  <!-- <link href="assets/css/variables-orange.css" rel="stylesheet"> -->
+  <!-- <link href="assets/css/variables-purple.css" rel="stylesheet"> -->
+  <!-- <link href="assets/css/variables-red.css" rel="stylesheet"> -->
+  <!-- <link href="assets/css/variables-pink.css" rel="stylesheet"> -->
 
   <!-- Template Main CSS File -->
   <link href="/main.css" rel="stylesheet">
@@ -49,7 +54,8 @@
   <header id="header" class="header fixed-top" data-scrollto-offset="0">
     <div class="container-fluid d-flex align-items-center justify-content-between">
 
-      <a href="/" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+      <a href="/user" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1>JanSuvidha<span></span></h1>
       </a>
@@ -57,21 +63,46 @@
       <nav id="navbar" class="navbar">
 
         <ul>
+          <!-- <li class="dropdown"><a href="#"><span>Home</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a></li> -->
           <li><a class="nav-link scrollto" href="#">Home</a></li>
           <li><a class="nav-link scrollto" href="/allschemes">Schemes</a></li>
           <li><a class="nav-link scrollto" href="index.html#about">About</a></li>
-          <li><a class="nav-link scrollto" href="index.html#pricing">How it works</a></li>
+          <!-- <li><a class="nav-link scrollto" href="index.html#portfolio">Portfolio</a></li> -->
+          <li><a class="nav-link scrollto" href="index.html#team">How it works</a></li>
           <li><a class="nav-link scrollto" href="index.html#faq">FAQs</a></li>
           <li><a class="nav-link scrollto" href="index.html#contact">Contact</a></li>
           <li id="google_translate_element" class="nav-link scrollto"></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle d-none"></i>
       </nav><!-- .navbar -->
-
-      <a class="btn-getstarted scrollto" href="/login">LOGIN</a>
+      <div class="btn action userbtn">
+        <div class="profile" onclick="menuToggle();">
+          <img src="https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg" />
+        </div>
+        <div class="menu">
+          <h3><%= loggeduser%><br /><span>Website Designer</span></h3>
+          <ul>
+            <li>
+              <img src="assets/icons/user.png" /><a href="/profile">My profile</a>
+            </li>
+            <li>
+              <img src="assets/icons/edit.png" /><a href="/updateProfile">Edit profile</a>
+            </li>
+            <li>
+              <img src="assets/icons/envelope.png" /><a href="#">Inbox</a>
+            </li>
+            <li>
+              <img src="assets/icons/settings.png" /><a href="#">Setting</a>
+            </li>
+            <li><img src="assets/icons/question.png" /><a href="#">Help</a></li>
+            <li>
+              <img src="assets/icons/log-out.png" /><a href="/logout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- <a class="btn-getstarted scrollto" href="/login"><%= loggeduser%>>></a> -->
 
     </div>
   </header>
   <!-- End Header -->
-
-

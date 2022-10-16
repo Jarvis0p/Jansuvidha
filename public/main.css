@@ -1145,7 +1145,24 @@ section {
 
 .featured-services .container h2{
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
+}
+.find-btn {
+  display: inline-block;
+  padding: 12px 40px;
+  border-radius: 6px;
+  color: var(--color-primary);
+  transition: none;
+  font-size: 16px;
+  font-weight: 700;
+  transition: 0.3s;
+  margin-bottom: 15px;
+  border: 1px solid var(--color-primary);
+}
+
+.find-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .featured-services .service-item .icon {
@@ -1195,9 +1212,14 @@ section {
   color: var(--color-primary);
 }
 
+
+
 /*--------------------------------------------------------------
 # About Section
 --------------------------------------------------------------*/
+.about .container{
+  max-height: 500px;
+}
 .about .about-img {
   position: relative;
   margin: 60px 0 0 60px;
@@ -1305,14 +1327,14 @@ section {
   background: linear-gradient(rgba(var(--color-secondary-rgb), 0.9), rgba(var(--color-secondary-rgb), 0.9)), url("../img/pricing-bg.jpg") center center;
   background-size: cover;
   text-align: center;
-  padding: 40px;
+  padding: 20px;
   margin: -60px -40px 0;
 }
 
 .pricing h3 {
   font-weight: 600;
   margin-bottom: 5px;
-  font-size: 36px;
+  font-size: 26px;
   color: var(--color-white);
 }
 
@@ -1368,7 +1390,9 @@ section {
   text-decoration: line-through;
 }
 
-.pricing .buy-btn {
+/* .pricing */
+
+/* .find-btn {
   display: inline-block;
   padding: 12px 40px;
   border-radius: 6px;
@@ -1377,13 +1401,14 @@ section {
   font-size: 16px;
   font-weight: 700;
   transition: 0.3s;
+  margin-bottom: 15px;
   border: 1px solid var(--color-primary);
 }
 
-.pricing .buy-btn:hover {
+.find-btn:hover {
   background: var(--color-primary);
   color: var(--color-white);
-}
+} */
 
 .pricing .featured {
   border-color: var(--color-primary);

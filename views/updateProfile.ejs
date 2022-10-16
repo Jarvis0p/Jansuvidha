@@ -1,4 +1,4 @@
-<%- include('partials/header') %>
+<%- include('partials/header2') %>
 <form action="/updateProfile" method="post">
   <section style="background-color: #eee;">
     <div class="container py-5">
@@ -13,14 +13,14 @@
           </nav>
         </div>
       </div>
-
+      <h3 class="upt-profile-alert">Please Complete Your Profile to Find Schemes for you</h3>
       <div class="row">
         <div class="col-lg-4">
           <div class="card mb-4">
             <div class="card-body text-center">
               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                 class="rounded-circle img-fluid" style="width: 150px;">
-              <h5 class="my-3">John Smith </h5>
+              <h5 class="my-3"><%= userData[0].FullName %> </h5>
               <!-- <p class="text-muted mb-1">Full Stack Developer</p>
               <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> -->
               <div class="d-flex justify-content-center mb-2">
@@ -39,19 +39,6 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                   <i class="fab fa-whatsapp fa-lg" style="color: #4FCE5D;"></i>
                   <button type="button" class="btn btn-outline-primary">Link Whatsapp</button>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                  <i class="fab fa-solid fa-door-closed"></i>
-                  <!-- <i class="fab fa-solid fa-door-closed fa-lg" style="color: #55acee;"></i> -->
-                  <p class="mb-0">@mdbootstrap</p>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                  <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                  <p class="mb-0">mdbootstrap</p>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                  <i class="fab fa-facebook-f fa-lg" style="color: #3b5998;"></i>
-                  <p class="mb-0">mdbootstrap</p>
                 </li>
               </ul>
             </div>
@@ -96,9 +83,23 @@
                   <p class="mb-0">Gender</p>
                 </div>
                 <div class="col-sm-9">
-                  <input name="gender" value="Male" type="radio"> Male
-                  <input name="gender" value="Female" type="radio"> Female
-                  <input name="gender" value="Other" type="radio"> Other
+                  <% if(userData[0].Gender === "MALE"){ %>
+                  <input name="gender" value="MALE" type="radio" checked> Male
+                  <input name="gender" value="FEMALE" type="radio"> Female
+                  <input name="gender" value="OTHER" type="radio"> Other
+                  <% } else if(userData[0].Gender === "FEMALE") {%>
+                  <input name="gender" value="MALE" type="radio"> Male
+                  <input name="gender" value="FEMALE" type="radio" checked> Female
+                  <input name="gender" value="OTHER" type="radio"> Other
+                  <% } else if(userData[0].Gender === "OTHER") {%>
+                  <input name="gender" value="MALE" type="radio"> Male
+                  <input name="gender" value="FEMALE" type="radio"> Female
+                  <input name="gender" value="OTHER" type="radio" checked> Other
+                  <% } else {%>
+                  <input name="gender" value="MALE" type="radio"> Male
+                  <input name="gender" value="FEMALE" type="radio"> Female
+                  <input name="gender" value="OTHER" type="radio"> Other
+                  <% } %>
                 </div>
               </div>
               <hr>
@@ -118,8 +119,13 @@
                   <p class="mb-0">Education</p>
                 </div>
                 <div class="col-sm-9">
-                  <input name="education" type="text" class="form-control" placeholder="education"
-                    value="<%= userData[0].Education %>">
+                  <select class="form-control" name="education">
+                    <option value="Un-educated">Un-educated</option>
+                    <option value="Matric">Matric</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Graduate">Graduate</option>
+                  </select>
+                  <!-- value="<%= userData[0].Education %>"> -->
                 </div>
               </div>
               <hr>
@@ -146,109 +152,101 @@
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">City</p>
+                  <p class="mb-0">Town/City</p>
                 </div>
                 <div class="col-sm-9">
-                  <input id="myInput" name="city" type="text" class="form-control" placeholder="Select City" value="">
+                  <input id="myInput" name="town" type="text" class="form-control" placeholder="Select City"
+                    value="<%= userData[0].Town %>">
                 </div>
               </div>
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">Postcode</p>
+                  <p class="mb-0">Area</p>
+                </div>
+                <div class="col-sm-9">
+                  <input name="area" value="URBAN" type="radio"> Urban
+                  <input name="area" value="RURAL" type="radio"> Rural
+                  <!-- value="<%= userData[0].Town %>"> -->
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Postal Code</p>
                 </div>
                 <div class="col-sm-9">
                   <input name="postcode" type="number" class="form-control" placeholder="postcode"
-                    value="<%= userData[0].EmailID %>">
+                    value="<%= userData[0].PostalCode %>">
                 </div>
               </div>
-              <!-- <div class="row">
+              <hr>
+              <div class="row">
                 <div class="col-sm-3">
-                  <p class="mb-0">City </p>
+                  <p class="mb-0">Caste</p>
                 </div>
                 <div class="col-sm-9">
-                  <select class="form-select form-control" name="city">
-                    <option value="Ahmedabad" selected>Ahmedabad</option>
-                    <option value="Gandhinagar">Gandhinagar</option>
-                    <option value="Bhavnagar">Bhavnagar</option>
-                    <option value="Una">Una</option>
-                    <option value="Surat">Surat</option>
+                  <select class="form-control" name="caste">
+                    <option value="GENERAL">General</option>
+                    <option value="OBC">OBC(other backward classes)</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
                   </select>
+                  <!-- value="<%= userData[0].Caste %>"> -->
                 </div>
-              </div> -->
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Differently Abled (%)</p>
+                </div>
+                <div class="col-sm-9">
+                  <input name="diffable" type="number" class="form-control" placeholder="0-100"
+                    value="<%= userData[0].DifferentlyAbledPercentage %>">
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Currently Studying? (Y/N)</p>
+                </div>
+                <div class="col-sm-9">
+                  <select class="form-control" name="isstudent">
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                  <!-- value="<%= userData[0].IsStudent %>"> -->
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Is BPL (Y/N)</p>
+                </div>
+                <div class="col-sm-9">
+                  <select class="form-control" name="isbpl">
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                  <!-- value="<%= userData[0].IsBPL %>"> -->
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Income</p>
+                </div>
+                <div class="col-sm-9">
+                  <input name="Income" type="number" class="form-control" placeholder="enter your income"
+                    value="<%= userData[0].Income %>">
+                </div>
+              </div>
             </div>
             <div class="mt-3 text-center">
               <button class="btn btn-primary profile-button updateProfile-saveButton" type="submit">Save
                 Profile</button>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-6">
-              <div class="card mb-4 mb-md-0">
-                <div class="card-body">
-                  <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
-                  </p>
-                  <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                  <div class="progress rounded mb-2" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card mb-4 mb-md-0">
-                <div class="card-body">
-                  <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
-                  </p>
-                  <p class="mb-1" style="font-size: .77rem;">Web Design</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
-                  <div class="progress rounded" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
-                  <div class="progress rounded mb-2" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
-                      aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
         </div>
       </div>
     </div>
@@ -256,11 +254,40 @@
   </section>
 </form>
 <script>
-  var countries = ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh",
-    "Gandhidham", "Anand", "Navsari", "Morbi", "Nadiad", "Surendranagar", "Bharuch", "Mehsana", "Bhuj", "Porbandar",
-    "Palanpur", "Valsad", "Vapi", "Gondal", "Veraval", "Godhra", "Patan", "Kalol", "Dahod", "Botad", "Amreli",
-    "Deesa", "Jetpur"
+  var countries = ["Abrama", "Adalaj", "Adityana", "Ahmedabad", "Ahwa", "Alang", "Alikherva", "Ambaji", "Ambaliyasan",
+    "Amboli", "Amod", "Amreli", "Anand", "Anandpar", "Anandpar", "Jamnagar", "Andada", "Anjar", "Anklav",
+    "Ankleshwar", "Antaliya", "Arambhada", "Arsodiya", "Atul", "Baben", "Babra", "Bagasara", "Balasinor", "Baliyasan",
+    "Bansda", "Bantwa", "Bardoli", "Bareja", "Barwala", "Bavla", "Bayad", "Bechar", "Bedi", "Bhabhar", "Bhachau",
+    "Bhadkodara", "Bhagal", "Bhagal", "Valsad District", "Bhalpara", "Bhanvad", "Bharuch", "Bhat", "Bhavnagar",
+    "Bhayavadar", "Bhilad", "Bhiloda", "Bhuj", "Bhurivel", "Bilimora", "Bodeli", "Boriavi", "Borsad", "Botad",
+    "Chaklasi", "Chalala", "Chalthan", "Chanasma", "Changodar", "Chanod", "Chhapi", "Chhapra", "Chhatral", "Chhiri",
+    "Chhota Udaipur", "Chikhli", "Chorwad", "Chotila", "Dabhoi", "Dahej", "Dakor", "Damnagar", "Dediapada", "Deesa",
+    "Dehari", "Dehgam", "Deodar", "Devgadbaria", "Devsar", "Dhandhuka", "Dhanera", "Dharampur", "Dhasa Vishi",
+    "Dhola", "Dholka", "Dhoraji", "Dhrangadhra", "Dhrol", "Digvijaygram", "Dohad", "Dungarpur", "Dungarpur", "Dwarka",
+    "Gadhada", "Gamdi", "Gandevi", "Gandhidham", "Gandhinagar", "Gariadhar", "Ghogha", "GIDC Antaliya", "GIDC Panoli",
+    "GIDC Por", "GIDC Savli", "Godhra", "Gondal", "GSFC Motikhavdi", "Sikka INA", "GSFC Reliance Complex",
+    "GWC Township Kovaya", "Hajira", "Halol", "Halvad", "Hansalpur", "Harij", "Himmatnagar", "Ichchhapor", "Ichhapor",
+    "Idar", "Jafrabad", "Jalalpore", "Jamavala", "Jambusar", "Jamjodhpur", "Jamnagar", "Jarod", "Jasdan", "Jetalsar",
+    "Jetpur", "Jetpur Navagadh", "Jhalod", "Joshipura", "Junagadh", "Kadi", "Kadodara", "Kakoshi", "Kalavad", "Kalol",
+    "Kandla Kanjari", "Kanodar", "Kapadvanj", "Karamsad", "Karjan", "Kathlal", "Katpar", "Kavant", "Keshod",
+    "Kevadiya", "Khambhalia", "Khambhat", "khapat", "Kharach", "Kharaghoda", "Kheda", "Khedbrahma", "Kheralu", "Kim",
+    "Kodinar", "Kosamba", "Kothria", "Kutiyana", "Lathi", "Lavachha", "Lilia", "Limbdi", "Limkheda", "Limla",
+    "Lodhikas", "Lunawada", "Madhapar", "Mahesana", "Mahudha", "Mahuva", "Mahuvar", "Malanka", "Maliya", "Malpur",
+    "Manavadar", "Mandvi", "Surat District", "Mangrol", "Mankuva", "Mansa", "Meghraj", "Mehmedabad", "Modasa",
+    "Modhera", "Morbi", "Mundra", "Nadiad", "Nalsarovar", "Nandej", "Nari", "Nasvadi", "Nava Bhildi", "Navlakhi SIR",
+    "Navsari", "Ode", "Okha Port", "Orvad", "Paddhari", "Padra", "Palaj", "Palanpur", "Palej", "Palitana",
+    "Panoli INA", "Parabada", "Pardi", "Parnera", "Patan", "Patdi", "Pethapur", "Petlad", "Porbandar", "Prantij",
+    "Radhanpur", "Rajkot", "Rajpipla", "Rajula", "Ranavav", "Ranpur", "Rapar", "Raval", "Ravapara", "Sagbara",
+    "Salaya", "Salvav", "SanandSanand GIDC", "Sanjan", "Sanjeli", "Santrampur", "Saputara", "Sarigam", "Sathamba",
+    "Savarkundla", "Savli", "Sayan", "Selamba", "Shapur", "Shapur", "Rajkot District", "Shehera", "Sidhpur", "Sidsar",
+    "Sihor", "Sikka", "Simar SIR", "Sojitra", "Somnath", "Songadh", "Sukhpar", "Surajkaradi", "Surat",
+    "Surendranagar", "Sutrapada", "Talaja", "Talala", "Talod", "Tarsadi", "Thangadh", "Thara", "Tharad", "Thasra",
+    "Ukai", "Umbergaon", "Umrala", "Umreth", "Una", "Undach", "Unjha", "Upleta", "Vadali", "Vadia", "Vadnagar",
+    "Vadodara", "Vaghodia", "Valia", "Vallabhipur", "Valsad", "Vanthali", "Vapi", "Vartej", "Vasna", "Veraval",
+    "Vijalpor", "Vijapur", "Vijaynagar", "Vilayat GIDC", "Viramgam", "Virpur", "Virpur", "Visavadar", "Visnagar",
+    "Vyara", "Wadhwan", "Waghai", "Wankaner"
   ]
+
 
   autocomplete(document.getElementById("myInput"), countries);
 
@@ -364,6 +391,12 @@
     document.addEventListener("click", function (e) {
       closeAllLists(e.target);
     });
+  }
+</script>
+<script>
+  function menuToggle() {
+    const toggleMenu = document.querySelector(".menu");
+    toggleMenu.classList.toggle("active");
   }
 </script>
 <%- include('partials/footer') %>

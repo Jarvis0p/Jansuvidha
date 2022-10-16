@@ -379,3 +379,40 @@ th, td {
   margin-top: 150px;
   margin-bottom: 150px;
 }
+
+
+@media only screen and (max-width: 600px) {
+  .userbtn{
+    margin-right: 100px;
+  }
+}
+
+.department{
+  width: auto;
+}
+
+.upt-profile-alert{
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .upt-profile-alert{
+    width: auto;
+  }
+}
+
+.filter-scheme{
+  margin-top: 100px;
+}
+
+.apply-thanks{
+  margin-top: 250px;
+  text-align: center;
+}
+
+.apply-registered{
+  margin-bottom: 200px;
+  text-align: center;
+}
