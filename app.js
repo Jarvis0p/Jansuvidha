@@ -25,11 +25,11 @@ app.use(bodyParser.json());
 
 // mysql connection
 let options = {
-  host: 'localhost',
+  host: 'sql7.freemysqlhosting.net',
   port: '3306',
-  user: 'root',
-  password: 'root',
-  database: 'janshuvidha'
+  user: 'sql7534038',
+  password: 'Lmzmnk7UNt',
+  database: 'sql7534038'
 };
 
 var connections = mysql.createConnection(options);
@@ -226,7 +226,7 @@ app.get("/apply/:scheme", function (req, res) {
         searchResult = JSON.parse(JSON.stringify(searchResult));
         console.log(searchResult);
         if (searchResult.length === 0) {
-          mysqlQuery = "INSERT INTO `janshuvidha`.`appliedschemes` (`UserNumber`, `SchemeID`) VALUES (\'" + requestedNumber + "\', \'" + req.params.scheme + "\')"
+          mysqlQuery = "INSERT INTO `sql7534038`.`appliedschemes` (`UserNumber`, `SchemeID`) VALUES (\'" + requestedNumber + "\', \'" + req.params.scheme + "\')"
           console.log(mysqlQuery);
           connections.query(mysqlQuery, function (err, insertResult, fields) {
             if (err) throw err;
@@ -279,7 +279,7 @@ app.get("/user/schemes", function (req, res) {
             console.log(genderbool, castebool, diffablebool, studentbool, incomebool);
             //filter statement
             console.log(result[0].IsStudent);
-            console.log(element.ForStudents);
+            console.log(element.ForStudent);
             if (genderbool && castebool && diffablebool && studentbool && incomebool)
               filterschemes.push(element);
           });
@@ -324,7 +324,7 @@ app.post("/updateProfile", function (req, res) {
     console.log("Income: " + req.body.Income);
 
 
-    mysqlQuery = "UPDATE `janshuvidha`.`user` SET `FullName` = '" + req.body.fullname + "', `EmailID` = '" + req.body.email + "', `Gender` = '" + req.body.gender + "', `DOB` = '" + req.body.dateOfBirth + "', `Education` = '" + req.body.education + "', `AddressLine1` = '" + req.body.addressline1 + "', `AddressLine2` = '" + req.body.addressline2 + "', `Town` = '" + req.body.town + "', `Area` = '" + req.body.area + "', `PostalCode` = '" + req.body.postcode + "', `Caste` = '" + req.body.caste + "', `DifferentlyAbledPercentage` = '" + req.body.diffable + "', `Income` = '" + req.body.Income + "', `IsStudent` = '" + req.body.isstudent + "', `IsBPL` = '" + req.body.isbpl + "' WHERE (`Number` = '" + req.body.phoneNumber + "')"
+    mysqlQuery = "UPDATE `sql7534038`.`user` SET `FullName` = '" + req.body.fullname + "', `EmailID` = '" + req.body.email + "', `Gender` = '" + req.body.gender + "', `DOB` = '" + req.body.dateOfBirth + "', `Education` = '" + req.body.education + "', `AddressLine1` = '" + req.body.addressline1 + "', `AddressLine2` = '" + req.body.addressline2 + "', `Town` = '" + req.body.town + "', `Area` = '" + req.body.area + "', `PostalCode` = '" + req.body.postcode + "', `Caste` = '" + req.body.caste + "', `DifferentlyAbledPercentage` = '" + req.body.diffable + "', `Income` = '" + req.body.Income + "', `IsStudent` = '" + req.body.isstudent + "', `IsBPL` = '" + req.body.isbpl + "' WHERE (`Number` = '" + req.body.phoneNumber + "')"
     connections.query(mysqlQuery, function (err, insertResult, fields) {
       if (err) throw err;
       console.log("Into INSERT");
@@ -352,7 +352,7 @@ app.post("/login", function (req, res) {
     if (result.length === 0) {
       req.session.userinfo = requestedNumber;
       console.log(requestedNumber + "  Logged in");
-      connections.query("INSERT INTO `janshuvidha`.`user` (`Number`) VALUES (\'" + requestedNumber + "\')", function (err, insertResult, fields) {
+      connections.query("INSERT INTO `sql7534038`.`user` (`Number`) VALUES (\'" + requestedNumber + "\')", function (err, insertResult, fields) {
         if (err) throw err;
         console.log("Into INSERT");
         console.log(insertResult);
@@ -421,7 +421,7 @@ app.get("/addScheme", function (req, res) {
 })
 
 app.get("admin/addScheme", function (req, res) {
-  mysqlQuery = "INSERT INTO `janshuvidha`.`scheme` (`SchemeName`, `SchemeDept`, `SchemeInfo`, `MinAge`, `MaxAge`, `ForFemales`, `ForMales`, `ForOthers`, `Residence`, `ForGeneral`, `ForOBC`, `ForSC`, `ForST`, `DifferentlyAbledCriteria`, `ForMinority`, `ForStudent`, `ForBPL`, `IncomeCriteria`) VALUES (\'" + req.body.schemeName + "\', '3', 'test info', '15', '40', 'YES', 'NO', 'YES', 'BOTH', 'YES', 'YES', 'YES', 'YES', '0', 'YES', 'YES', 'YES', '-1');"
+  mysqlQuery = "INSERT INTO `sql7534038`.`scheme` (`SchemeName`, `SchemeDept`, `SchemeInfo`, `MinAge`, `MaxAge`, `ForFemales`, `ForMales`, `ForOthers`, `Residence`, `ForGeneral`, `ForOBC`, `ForSC`, `ForST`, `DifferentlyAbledCriteria`, `ForMinority`, `ForStudent`, `ForBPL`, `IncomeCriteria`) VALUES (\'" + req.body.schemeName + "\', '3', 'test info', '15', '40', 'YES', 'NO', 'YES', 'BOTH', 'YES', 'YES', 'YES', 'YES', '0', 'YES', 'YES', 'YES', '-1');"
   connections.query(mysqlQuery, function (err, insertResult, fields) {
     if (err) throw err;
     console.log("Into INSERT");
