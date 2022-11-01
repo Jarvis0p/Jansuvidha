@@ -3,13 +3,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const session = require("express-session");
-const csrf = require("csurf");
-const cookieParser = require("cookie-parser");
 const mysql = require('mysql');
-const MySQLStore = require('express-mysql-session')(session);
-const csrfMiddleware = csrf({
-  cookie: true
-});
+const request = require("request");
+const https = require("https");
 
 
 const app = express();
@@ -37,21 +33,22 @@ let options = {
 };
 
 var connections = mysql.createConnection(options);
-var sessionStore = new MySQLStore({
-  expiration: 10800000,
-  createDatabaseTable: true,
-  schema: {
-    tableName: 'sessiontbl',
-    columnNames: {
-      session_id: 'session_id',
-      expires: 'expires',
-      data: 'data'
-    }
-  }
-}, sessionStore);
+// var sessionStore = new MySQLStore({
+//   expiration: 10800000,
+//   createDatabaseTable: true,
+//   schema: {
+//     tableName: 'sessiontbl',
+//     columnNames: {
+//       session_id: 'session_id',
+//       expires: 'expires',
+//       data: 'data'
+//     }
+//   }
+// }, sessionStore);
 
 connections.connect(function (err) {
   if (err) throw err;
+  console.log("Database Connected");
 });
 
 app.use(session({
@@ -64,9 +61,7 @@ app.use(session({
 
 app.get("/", function (req, res) {
   if (req.session.userinfo) {
-    res.render("user", {
-      loggeduser: req.session.userinfo
-    });
+    res.redirect("user");
   } else {
     res.render("home");
   }
@@ -86,6 +81,7 @@ app.get("/logout", function (req, res) {
     res.redirect("/")
   });
 });
+
 
 app.get("/user", function (req, res) {
   if (req.session.userinfo) {
@@ -164,14 +160,45 @@ app.get("/updateProfile", function (req, res) {
 });
 
 app.get("/allschemes", function (req, res) {
-  mysqlQuery = "SELECT * FROM department"
-  connections.query(mysqlQuery, function (err, result, fields) {
-    if (err) throw err;
-    result = JSON.parse(JSON.stringify(result))
-    res.render("department", {
-      department: result
+  if (req.session.userinfo) {
+    var requestedNumber = req.session.userinfo
+    connections.query("SELECT * FROM user WHERE Number = \'" + requestedNumber + "\'", function (err, nameResult, fields) {
+      if (err) throw err;
+      nameResult = JSON.parse(JSON.stringify(nameResult));
+      var username = nameResult[0].FullName;
+      console.log(username + "  Logged in");
+      if (username === null) {
+        mysqlQuery = "SELECT * FROM department"
+        connections.query(mysqlQuery, function (err, result, fields) {
+          if (err) throw err;
+          result = JSON.parse(JSON.stringify(result))
+          res.render("userdepartment", {
+            department: result,
+            loggeduser: req.session.userinfo
+          });
+        });
+      } else {
+        mysqlQuery = "SELECT * FROM department"
+        connections.query(mysqlQuery, function (err, result, fields) {
+          if (err) throw err;
+          result = JSON.parse(JSON.stringify(result))
+          res.render("userdepartment", {
+            department: result,
+            loggeduser: username
+          });
+        });
+      }
     });
-  });
+  } else {
+    mysqlQuery = "SELECT * FROM department"
+    connections.query(mysqlQuery, function (err, result, fields) {
+      if (err) throw err;
+      result = JSON.parse(JSON.stringify(result))
+      res.render("department", {
+        department: result
+      });
+    });
+  }
 });
 
 app.get("/schemes/:department", function (req, res) {
@@ -247,10 +274,12 @@ app.get("/user/schemes", function (req, res) {
             var genderbool = (result[0].Gender === "MALE" && element.ForMales === "YES") || (result[0].Gender === "FEMALE" && element.ForFemales === "YES") || (result[0].Gender === "OTHERS" && element.ForOthers === "YES")
             var castebool = (result[0].Caste === "GENERAL" && element.ForGeneral === "YES") || (result[0].Caste === "OBC" && element.ForOBC === "YES") || (result[0].Caste === "SC" && element.ForSC === "YES") || (result[0].Caste === "ST" && element.ForST === "YES")
             var diffablebool = (result[0].DifferentlyAbledPercentage >= element.DifferentlyAbledCriteria)
-            var studentbool = (result[0].IsStudent === "YES" ^ element.ForStudents === "NO")
+            var studentbool = (result[0].IsStudent === "YES" && element.ForStudent === "YES") || (result[0].IsStudent === "NO" && element.ForStudent === "NO")
             var incomebool = (result[0].IsBPL === "YES" && element.ForBPL === "YES") || (result[0].IsBPL === "NO" && (element.IncomeCriteria === -1 || element.IncomeCriteria >= result[0].Income))
-
+            console.log(genderbool, castebool, diffablebool, studentbool, incomebool);
             //filter statement
+            console.log(result[0].IsStudent);
+            console.log(element.ForStudents);
             if (genderbool && castebool && diffablebool && studentbool && incomebool)
               filterschemes.push(element);
           });
@@ -285,7 +314,7 @@ app.post("/updateProfile", function (req, res) {
     console.log("education: " + req.body.education);
     console.log("addressline1: " + req.body.addressline1);
     console.log("addressline2: " + req.body.addressline2);
-    console.log("dateOfBirth: " + req.body.town);
+    console.log("Town: " + req.body.town);
     console.log("Area: " + req.body.area);
     console.log("postcode: " + req.body.postcode);
     console.log("caste: " + req.body.caste);
@@ -295,7 +324,7 @@ app.post("/updateProfile", function (req, res) {
     console.log("Income: " + req.body.Income);
 
 
-    mysqlQuery = "UPDATE `janshuvidha`.`user` SET `FullName` = '" + req.body.fullname + "', `EmailID` = '" + req.body.email + "', `Gender` = '" + req.body.gender + "', `DOB` = '" + req.body.dateOfBirth + "', `Education` = '" + req.body.education + "', `AddressLine1` = '" + req.body.addressline1 + "', `AddressLine2` = '" + req.body.addressline2 + "', `Town` = '" + req.body.addressline1 + "', `Area` = '" + req.body.area + "', `PostalCode` = '" + req.body.postcode + "', `Caste` = '" + req.body.caste + "', `DifferentlyAbledPercentage` = '" + req.body.diffable + "', `Income` = '" + req.body.Income + "' WHERE (`Number` = '" + req.body.phoneNumber + "')"
+    mysqlQuery = "UPDATE `janshuvidha`.`user` SET `FullName` = '" + req.body.fullname + "', `EmailID` = '" + req.body.email + "', `Gender` = '" + req.body.gender + "', `DOB` = '" + req.body.dateOfBirth + "', `Education` = '" + req.body.education + "', `AddressLine1` = '" + req.body.addressline1 + "', `AddressLine2` = '" + req.body.addressline2 + "', `Town` = '" + req.body.town + "', `Area` = '" + req.body.area + "', `PostalCode` = '" + req.body.postcode + "', `Caste` = '" + req.body.caste + "', `DifferentlyAbledPercentage` = '" + req.body.diffable + "', `Income` = '" + req.body.Income + "', `IsStudent` = '" + req.body.isstudent + "', `IsBPL` = '" + req.body.isbpl + "' WHERE (`Number` = '" + req.body.phoneNumber + "')"
     connections.query(mysqlQuery, function (err, insertResult, fields) {
       if (err) throw err;
       console.log("Into INSERT");
@@ -336,6 +365,43 @@ app.post("/login", function (req, res) {
   });
 });
 
+app.post("/newsletter", function (req, res) {
+  const email = req.body.email;
+  console.log(email);
+
+
+  // Mailchimp
+
+  const data = {
+    members: [{
+      email_address: email,
+      status: "subscribed"
+    }]
+  };
+
+  const jsonData = JSON.stringify(data);
+  const url = "https://us12.api.mailchimp.com/3.0/lists/53814679ab";
+  const options = {
+    method: "POST",
+    auth: "jarvis0p:ea2c46bff2d895813547aff66eb8319c-us12"
+
+  }
+
+  const request = https.request(url, options, function (response) {
+    response.on("data", function (data) {
+      console.log(JSON.parse(data));
+    });
+    if (response.statusCode === 200) {
+      res.render("success");
+    } else {
+      res.sendFile(__dirname + "/failure.html");
+    }
+  });
+
+  request.write(jsonData);
+  request.end();
+});
+
 
 
 // admin routes
@@ -344,14 +410,24 @@ app.get("/admin", function (req, res) {
   connections.query(mysqlQuery, function (err, result, fields) {
     if (err) throw err;
     result = JSON.parse(JSON.stringify(result));
-    res.render("admin-home",{
+    res.render("admin-home", {
       userData: result
     })
   });
 });
 
-app.get("admin/addScheme",function(req,res){
-  
+app.get("/addScheme", function (req, res) {
+  res.render("addScheme");
+})
+
+app.get("admin/addScheme", function (req, res) {
+  mysqlQuery = "INSERT INTO `janshuvidha`.`scheme` (`SchemeName`, `SchemeDept`, `SchemeInfo`, `MinAge`, `MaxAge`, `ForFemales`, `ForMales`, `ForOthers`, `Residence`, `ForGeneral`, `ForOBC`, `ForSC`, `ForST`, `DifferentlyAbledCriteria`, `ForMinority`, `ForStudent`, `ForBPL`, `IncomeCriteria`) VALUES (\'" + req.body.schemeName + "\', '3', 'test info', '15', '40', 'YES', 'NO', 'YES', 'BOTH', 'YES', 'YES', 'YES', 'YES', '0', 'YES', 'YES', 'YES', '-1');"
+  connections.query(mysqlQuery, function (err, insertResult, fields) {
+    if (err) throw err;
+    console.log("Into INSERT");
+    console.log(insertResult);
+    res.redirect("/profile");
+  });
 });
 
 app.listen(process.env.PORT || 3000, function () {

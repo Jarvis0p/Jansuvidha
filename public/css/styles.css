@@ -410,9 +410,20 @@ th, td {
 .apply-thanks{
   margin-top: 250px;
   text-align: center;
+  margin-bottom: 50px;
 }
 
 .apply-registered{
   margin-bottom: 200px;
   text-align: center;
+}
+
+.container-addScheme{
+  margin-top: 100px;
+}
+
+
+.errormsg{
+  margin-top: 150px;
+  margin-bottom: 150px;
 }

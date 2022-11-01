@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-sm-9">
                   <input name="dateOfBirth" type="date" id="time_start" class="form-control"
-                    placeholder="enter date of birth" value="">
+                    placeholder="enter date of birth" value="<%= userData[0].DOB %>" required>
                 </div>
               </div>
               <hr>
@@ -120,10 +120,33 @@
                 </div>
                 <div class="col-sm-9">
                   <select class="form-control" name="education">
+                    <% if(userData[0].Education === "Un-educated"){ %>
                     <option value="Un-educated">Un-educated</option>
                     <option value="Matric">Matric</option>
                     <option value="Inter">Inter</option>
                     <option value="Graduate">Graduate</option>
+                    <% } else if(userData[0].Education === "Matric") {%>
+                    <option value="Matric">Matric</option>
+                    <option value="Un-educated">Un-educated</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Graduate">Graduate</option>
+                    <% } else if(userData[0].Education === "Inter") {%>
+                    <option value="Inter">Inter</option>
+                    <option value="Un-educated">Un-educated</option>
+                    <option value="Matric">Matric</option>
+                    <option value="Graduate">Graduate</option>
+                    <% } else if(userData[0].Education === "Graduate") {%>
+                    <option value="Graduate">Graduate</option>
+                    <option value="Un-educated">Un-educated</option>
+                    <option value="Matric">Matric</option>
+                    <option value="Inter">Inter</option>
+                    <% } else{%>
+                    <option value=""></option>
+                    <option value="Un-educated">Un-educated</option>
+                    <option value="Matric">Matric</option>
+                    <option value="Inter">Inter</option>
+                    <option value="Graduate">Graduate</option>
+                    <% } %>
                   </select>
                   <!-- value="<%= userData[0].Education %>"> -->
                 </div>
@@ -165,9 +188,16 @@
                   <p class="mb-0">Area</p>
                 </div>
                 <div class="col-sm-9">
-                  <input name="area" value="URBAN" type="radio"> Urban
+                  <% if(userData[0].Area === "URBAN"){ %>
+                  <input name="area" value="URBAN" type="radio" required checked> Urban
                   <input name="area" value="RURAL" type="radio"> Rural
-                  <!-- value="<%= userData[0].Town %>"> -->
+                  <% } else if(userData[0].Area === "RURAL") {%>
+                  <input name="area" value="URBAN" type="radio" required> Urban
+                  <input name="area" value="RURAL" type="radio" checked> Rural
+                  <% } else {%>
+                  <input name="area" value="URBAN" type="radio" required> Urban
+                  <input name="area" value="RURAL" type="radio"> Rural
+                  <% } %>
                 </div>
               </div>
               <hr>
@@ -187,10 +217,34 @@
                 </div>
                 <div class="col-sm-9">
                   <select class="form-control" name="caste">
+                    <% if(userData[0].Caste === "GENERAL"){ %>
                     <option value="GENERAL">General</option>
                     <option value="OBC">OBC(other backward classes)</option>
                     <option value="SC">SC</option>
                     <option value="ST">ST</option>
+                    <% } else if(userData[0].Caste === "OBC") {%>
+                    <option value="OBC">OBC(other backward classes)</option>
+                    <option value="GENERAL">General</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <% } else if(userData[0].Caste === "SC") {%>
+                    <option value="SC">SC</option>
+                    <option value="GENERAL">General</option>
+                    <option value="OBC">OBC(other backward classes)</option>
+                    <option value="ST">ST</option>
+                    <% } else if(userData[0].Caste === "ST") {%>
+                    <option value="ST">ST</option>
+                    <option value="GENERAL">General</option>
+                    <option value="OBC">OBC(other backward classes)</option>
+                    <option value="SC">SC</option>
+                    <% } else{%>
+                    <option value=""></option>
+                    <option value="ST">ST</option>
+                    <option value="GENERAL">General</option>
+                    <option value="OBC">OBC(other backward classes)</option>
+                    <option value="SC">SC</option>
+                    <% } %>
+
                   </select>
                   <!-- value="<%= userData[0].Caste %>"> -->
                 </div>
@@ -212,8 +266,17 @@
                 </div>
                 <div class="col-sm-9">
                   <select class="form-control" name="isstudent">
+                    <% if(userData[0].IsStudent === "YES"){ %>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
+                    <% } else if(userData[0].IsStudent === "NO") {%>
+                    <option value="NO">NO</option>
+                    <option value="YES">YES</option>
+                    <% } else{%>
+                    <option value=""></option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <% } %>
                   </select>
                   <!-- value="<%= userData[0].IsStudent %>"> -->
                 </div>
@@ -225,8 +288,17 @@
                 </div>
                 <div class="col-sm-9">
                   <select class="form-control" name="isbpl">
+                    <% if(userData[0].IsBPL === "YES"){ %>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
+                    <% } else if(userData[0].IsBPL === "NO") {%>
+                    <option value="NO">NO</option>
+                    <option value="YES">YES</option>
+                    <% } else{%>
+                    <option value=""></option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <% } %>
                   </select>
                   <!-- value="<%= userData[0].IsBPL %>"> -->
                 </div>
